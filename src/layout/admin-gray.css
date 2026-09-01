@@ -1,0 +1,89 @@
+.admin-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 220px;
+  background-color: #1f1f1f;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s;
+}
+
+.sidebar.collapsed {
+  width: 60px;
+}
+
+.sidebar .sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+}
+
+.sidebar .sidebar-link {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+
+.sidebar .sidebar-link.active {
+  background-color: #333;
+}
+
+.sidebar .sidebar-link:hover {
+  background-color: #2a2a2a;
+}
+
+.sidebar .sidebar-link svg,
+.sidebar .sidebar-link span {
+  margin-right: 8px;
+}
+
+.sidebar.collapsed .sidebar-link span {
+  display: none;
+}
+
+.sidebar-logout {
+  margin-top: auto;
+  padding: 1rem 3rem;
+
+  background-color: rgba(220, 53, 69, 0.15); /* rojo suave */
+  border: none;
+  border-radius: 8px;
+
+  color: #fff;
+  cursor: pointer;
+  text-align: left;
+
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.sidebar-logout:hover {
+  background-color: rgba(220, 53, 69, 0.35);
+}
+
+.sidebar-logout:active {
+  transform: scale(0.97);
+}
+
+.sidebar-logout i {
+  font-size: 18px;
+}
+
+.admin-content {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  transition: margin-left 0.3s;
+}

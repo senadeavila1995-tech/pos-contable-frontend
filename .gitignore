@@ -1,0 +1,20 @@
+node_modules/
+dist/
+.env
+
+# Archivos JavaScript generados accidentalmente junto a TypeScript
+src/**/*.js
+
+# Respaldos SQL vacíos/locales
+full_backup.sql
+pos_db_backup.sql
+
+# Archivos de entorno locales
+.env.*
+!.env.example
+
+# Logs
+*.log
+
+# Archivos temporales
+.DS_Store

@@ -1,0 +1,20 @@
+# 📦 POS Contable con Caja
+
+Sistema de punto de venta (POS) contable con gestión de ventas, caja, productos, clientes y control financiero. Desarrollado con Node.js, TypeScript, Express y MySQL.
+
+---
+
+## 🚀 Características
+
+- 💰 Gestión de ventas en tiempo real
+- 🧾 Facturación con detalle de productos
+- 🏦 Módulo de caja (apertura, cierre, movimientos)
+- 📦 Inventario de productos
+- 👤 Gestión de clientes y usuarios
+- 📊 Reportes básicos de ventas
+- 🔐 Preparado para autenticación JWT
+- 🗄️ Base de datos MySQL relacional
+
+---
+
+## 🧱 Estructura del proyecto
