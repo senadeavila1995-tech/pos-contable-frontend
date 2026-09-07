@@ -7,50 +7,69 @@ interface Props {
   category?: Category | null;
 }
 
-export const CategoryForm = ({ onSave, onClose, category }: Props) => {
+export const CategoryForm = ({
+  onSave,
+  onClose,
+  category,
+}: Props) => {
   const [nombre, setNombre] = useState(
     category?.nombre ?? ""
   );
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (
+    e: React.FormEvent
+  ) => {
     e.preventDefault();
-    if (!nombre.trim()) return;
+
+    if (!nombre.trim()) {
+      return;
+    }
 
     await onSave(nombre.trim());
-    setNombre("");
   };
 
   return (
-    <form className="card shadow-sm" onSubmit={handleSubmit}>
-      <div className="card-body">
-        <h5 className="fw-bold mb-3">
-          {category ? "Editar categoría" : "Nueva categoría"}
-        </h5>
+    <form onSubmit={handleSubmit}>
 
-        <div className="mb-3">
-          <label className="form-label">Nombre</label>
-          <input
-            className="form-control"
-            value={nombre}
-            onChange={(e) => setNombre(e.target.value)}
-            autoFocus
-          />
-        </div>
+      <div className="mb-3">
 
-        <div className="d-flex justify-content-end gap-2">
-          <button
-            type="button"
-            className="btn btn-outline-dark"
-            onClick={onClose}
-          >
-            Cancelar
-          </button>
+        <label className="form-label fw-semibold">
+          Nombre
+        </label>
 
-          <button type="submit" className="btn btn-dark">
-            {category ? "Actualizar" : "Guardar"}
-          </button>
-        </div>
+        <input
+          className="form-control"
+          value={nombre}
+          onChange={(e) =>
+            setNombre(e.target.value)
+          }
+          autoFocus
+          required
+        />
+
       </div>
+
+      <div className="d-flex justify-content-end gap-2 pt-3 border-top mt-3">
+
+        <button
+          type="button"
+          className="btn btn-outline-secondary"
+          onClick={onClose}
+        >
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          className="btn btn-dark"
+        >
+          {category
+            ? "Actualizar"
+            : "Guardar"}
+        </button>
+
+      </div>
+
     </form>
   );
 };
