@@ -16,6 +16,54 @@ export default function FacturacionPage() {
   const [ventaXML, setVentaXML] = useState<number | null>(null);
   const [error, setError] = useState("");
 
+  const [busqueda, setBusqueda] = useState("");
+  const [pagina, setPagina] = useState(1);
+
+  const registrosPorPagina = 10;
+
+  const ventasFiltradas = ventas.filter((venta) => {
+    const factura = facturas[venta.id];
+
+    const texto = [
+      venta.id,
+      venta.cliente_nombre || "",
+      venta.estado,
+      venta.total,
+      factura?.numero || "",
+      factura?.cufe || "",
+      factura?.estado_dian || "",
+    ]
+      .join(" ")
+      .toLowerCase();
+
+    return texto.includes(busqueda.toLowerCase());
+  });
+
+  const totalPaginas = Math.max(
+    1,
+    Math.ceil(ventasFiltradas.length / registrosPorPagina)
+  );
+
+  const ventasPaginadas = ventasFiltradas.slice(
+    (pagina - 1) * registrosPorPagina,
+    pagina * registrosPorPagina
+  );
+
+  const indiceInicio =
+    ventasFiltradas.length === 0
+      ? 0
+      : (pagina - 1) * registrosPorPagina + 1;
+
+  const indiceFin = Math.min(
+    pagina * registrosPorPagina,
+    ventasFiltradas.length
+  );
+
+  const cambiarBusqueda = (valor: string) => {
+    setBusqueda(valor);
+    setPagina(1);
+  };
+
   const cargarVentas = async () => {
     try {
       setError("");
@@ -180,6 +228,37 @@ export default function FacturacionPage() {
       <div className="card shadow-sm">
         <div className="card-body">
 
+          <div className="row g-3 align-items-center mb-4">
+            <div className="col-md-8">
+              <label className="form-label fw-semibold mb-1">
+                Buscar
+              </label>
+
+              <div className="input-group">
+                <span className="input-group-text">🔎</span>
+
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Venta, cliente, factura, CUFE o estado..."
+                  value={busqueda}
+                  onChange={(e) => cambiarBusqueda(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="col-md-4 text-md-end">
+              <div className="small text-muted mt-3 mt-md-4">
+                Mostrando{" "}
+                <strong>{indiceInicio}</strong>
+                {"–"}
+                <strong>{indiceFin}</strong>
+                {" de "}
+                <strong>{ventasFiltradas.length}</strong>
+              </div>
+            </div>
+          </div>
+
           <div className="table-responsive">
 
             <table className="table table-bordered table-hover align-middle mb-0">
@@ -201,7 +280,7 @@ export default function FacturacionPage() {
 
               <tbody>
 
-                {ventas.map((venta) => {
+                {ventasPaginadas.map((venta) => {
 
                   const factura = facturas[venta.id];
 
@@ -397,7 +476,7 @@ export default function FacturacionPage() {
 
                 {/* Sin ventas */}
 
-                {ventas.length === 0 && (
+                {ventasFiltradas.length === 0 && (
 
                   <tr>
 
@@ -405,7 +484,9 @@ export default function FacturacionPage() {
                       colSpan={8}
                       className="text-center text-muted py-5"
                     >
-                      No hay ventas disponibles.
+                      {ventas.length === 0
+                        ? "No hay ventas disponibles."
+                        : "No se encontraron resultados para la búsqueda."}
                     </td>
 
                   </tr>
@@ -417,6 +498,73 @@ export default function FacturacionPage() {
             </table>
 
           </div>
+
+          {totalPaginas > 1 && (
+            <div className="d-flex flex-wrap justify-content-between align-items-center gap-3 mt-4">
+              <div className="small text-muted">
+                Página <strong>{pagina}</strong> de{" "}
+                <strong>{totalPaginas}</strong>
+              </div>
+
+              <nav aria-label="Paginación de facturación">
+                <ul className="pagination pagination-sm mb-0">
+
+                  <li className={`page-item ${pagina === 1 ? "disabled" : ""}`}>
+                    <button
+                      type="button"
+                      className="page-link"
+                      disabled={pagina === 1}
+                      onClick={() =>
+                        setPagina((actual) => Math.max(1, actual - 1))
+                      }
+                    >
+                      Anterior
+                    </button>
+                  </li>
+
+                  {Array.from(
+                    { length: totalPaginas },
+                    (_, index) => index + 1
+                  ).map((numeroPagina) => (
+                    <li
+                      key={numeroPagina}
+                      className={`page-item ${
+                        pagina === numeroPagina ? "active" : ""
+                      }`}
+                    >
+                      <button
+                        type="button"
+                        className="page-link"
+                        onClick={() => setPagina(numeroPagina)}
+                      >
+                        {numeroPagina}
+                      </button>
+                    </li>
+                  ))}
+
+                  <li
+                    className={`page-item ${
+                      pagina === totalPaginas ? "disabled" : ""
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      className="page-link"
+                      disabled={pagina === totalPaginas}
+                      onClick={() =>
+                        setPagina((actual) =>
+                          Math.min(totalPaginas, actual + 1)
+                        )
+                      }
+                    >
+                      Siguiente
+                    </button>
+                  </li>
+
+                </ul>
+              </nav>
+            </div>
+          )}
 
         </div>
       </div>
